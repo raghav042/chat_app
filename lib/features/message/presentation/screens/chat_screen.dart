@@ -15,16 +15,16 @@ import '../widgets/message_action_dialog.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/message_input.dart';
 
-class ChatScreen extends StatefulWidget {
+class MessageScreen extends StatefulWidget {
   final ProfileEntity otherUser;
 
-  const ChatScreen({super.key, required this.otherUser});
+  const MessageScreen({super.key, required this.otherUser});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<MessageScreen> createState() => _MessageScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _MessageScreenState extends State<MessageScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _messageController = TextEditingController();
   late MessageBloc _chatBloc;

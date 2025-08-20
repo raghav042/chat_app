@@ -1,3 +1,4 @@
+import 'package:chat_app/features/chat/presentation/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,8 +37,6 @@ class MyApp extends StatelessWidget {
             ],
           );
         },
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
         theme: ThemeData(primarySwatch: Colors.blue),
         initialRoute: RouteNames.login,
         onGenerateRoute: AppRoutes.generateRoute,
@@ -48,13 +47,7 @@ class MyApp extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             } else if (state is Authenticated) {
-              // TODO: Return your main application screen, e.g., HomeScreen()
-              // For now, returning a placeholder.
-              return const Scaffold(
-                body: Center(
-                  child: Text('Authenticated! Navigating to Home...'),
-                ),
-              );
+              return ChatScreen();
             } else if (state is Unauthenticated) {
               return LoginScreen();
             }
