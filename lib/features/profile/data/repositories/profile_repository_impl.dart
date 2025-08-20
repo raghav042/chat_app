@@ -6,22 +6,22 @@ import '../datasources/remote/profile_remote_datasource.dart';
 import '../models/profile_model.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
-  final ProfileRemoteDataSource _remoteDataSource;
-  final ProfileLocalDataSource _localDataSource;
+  final ProfileRemoteDataSource remoteDataSource;
+  final ProfileLocalDataSource localDataSource;
 
-  ProfileRepositoryImpl(this._remoteDataSource, this._localDataSource);
+  ProfileRepositoryImpl({required this.remoteDataSource,required this.localDataSource});
 
   @override
   Future<ProfileEntity?> getProfile(String uid) async {
     try {
-      final profile = await _localDataSource.getProfile(uid);
+      final profile = await localDataSource.getProfile(uid);
       return profile?.toEntity();
     } on AppException {
       // If the profile isn't in the cache, try the remote source.
       try {
-        final profile = await _remoteDataSource.getProfile(uid);
+        final profile = await remoteDataSource.getProfile(uid);
         if (profile != null) {
-          await _localDataSource.cacheProfile(profile);
+          await localDataSource.cacheProfile(profile);
           return profile.toEntity();
         }
         return null; // Profile not found remotely.
@@ -36,8 +36,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<void> updateProfile(ProfileEntity profile) async {
     try {
       final profileModel = ProfileModel.fromEntity(profile);
-      await _remoteDataSource.updateProfile(profileModel);
-      await _localDataSource.cacheProfile(profileModel);
+      await remoteDataSource.updateProfile(profileModel);
+      await localDataSource.cacheProfile(profileModel);
     } catch (e) {
       throw AppException('Failed to update profile: $e');
     }
@@ -48,8 +48,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<void> createProfile(ProfileEntity profile) async {
     try {
       final profileModel = ProfileModel.fromEntity(profile);
-      await _remoteDataSource.createProfile(profileModel);
-      await _localDataSource.cacheProfile(profileModel);
+      await remoteDataSource.createProfile(profileModel);
+      await localDataSource.cacheProfile(profileModel);
     } catch (e) {
       throw AppException('Failed to create profile: $e');
     }

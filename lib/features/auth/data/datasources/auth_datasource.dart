@@ -18,7 +18,7 @@ abstract class AuthDataSource {
   Future<void> logout();
 }
 
-abstract class AuthDataSourceImpl implements AuthDataSource {
+class AuthDataSourceImpl implements AuthDataSource {
   AuthDataSourceImpl({required this.auth, required this.firestore});
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;

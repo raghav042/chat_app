@@ -3,8 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../core/app_exception.dart';
 import '../../models/profile_model.dart';
 
-create repository and usecases for Profile
-
 abstract class ProfileRemoteDataSource {
   Future<void> createProfile(ProfileModel profile);
   Future<void> updateProfile(ProfileModel profile);
@@ -47,9 +45,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<ProfileModel?> getProfile(String uid) async {
     try {
       final snapshot = await _firestore.collection('users').doc(uid).get();
-      return snapshot.exists
-          ? ProfileModel.fromMap(snapshot.data()!)
-          : null;
+      return snapshot.exists ? ProfileModel.fromMap(snapshot.data()!) : null;
     } on FirebaseException catch (e) {
       throw AppException('Failed to get profile: ${e.message}');
     } catch (e) {

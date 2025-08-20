@@ -1,5 +1,11 @@
+import 'package:chat_app/features/auth/data/datasources/auth_datasource.dart';
 import 'package:chat_app/features/chat/data/models/chat_model.dart';
 import 'package:chat_app/features/message/data/models/message_model.dart';
+import 'package:chat_app/features/profile/data/datasources/local/profile_local_datasource.dart';
+import 'package:chat_app/features/profile/data/datasources/remote/profile_remote_datasource.dart';
+import 'package:chat_app/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:chat_app/features/profile/domain/repositories/profile_repository.dart';
+import 'package:chat_app/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,9 +15,12 @@ import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/usecase/logout_usecase.dart';
 import '../../features/chat/data/repositories/chat_repository_impl.dart';
 import '../../features/chat/domain/repositories/chat_repository.dart';
+import '../../features/chat/domain/usecases/get_chat_users_usecase.dart';
+import '../../features/chat/domain/usecases/get_users_usecase.dart';
 import '../../features/message/data/datasource/local/message_local_datasource.dart';
 import '../../features/message/data/datasource/remote/message_remote_datasource.dart';
 import '../../features/message/data/repository/message_repository_impl.dart';
+import '../../features/message/domain/repository/message_repository.dart';
 import '../../features/message/domain/usecase/delete_message_usecase.dart';
 import '../../features/message/domain/usecase/get_messages_usecase.dart';
 import '../../features/message/domain/usecase/send_message_usecase.dart';
@@ -23,6 +32,7 @@ import '../../features/auth/domain/usecase/login_usecase.dart';
 import '../../features/auth/domain/usecase/register_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 
+import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../connectivity/connectivity_service.dart';
 
 final sl = GetIt.instance;
@@ -73,8 +83,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteMessageUseCase(sl()));
 
   // Profile Use cases
-  sl.registerLazySingleton(() => GetUsersUseCase(sl()));
-  sl.registerLazySingleton(() => GetLastMessageUseCase(sl()));
+  sl.registerLazySingleton(() => GetProfileUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
+
+  // Chat Use cases
+  sl.registerLazySingleton(() => GetAllUsersUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllChatUsersUseCase(sl()));
 
   // Auth Repository
   sl.registerLazySingleton<AuthRepository>(
@@ -95,23 +109,28 @@ Future<void> init() async {
     ),
   );
 
-  // Users Repository
-  sl.registerLazySingleton<UsersRepository>(
-    () => UsersRepositoryImpl(
+  // Message Repository
+  sl.registerLazySingleton<MessageRepository>(
+    () => MessageRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+    ),
+  );
+
+  // Profile Repository
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(
       remoteDataSource: sl(),
       localDataSource: sl(),
     ),
   );
 
   // Auth Data sources
-  sl.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSource(auth: sl(), firestore: sl()),
-  );
-  sl.registerLazySingleton<UserLocalDataSource>(
-    () => UserLocalDataSourceImpl(sl()),
+  sl.registerLazySingleton<AuthDataSource>(
+    () => AuthDataSourceImpl(auth: sl(), firestore: sl()),
   );
 
-  // Chat Data sources
+  // Message Data sources
   sl.registerLazySingleton<MessageRemoteDataSource>(
     () => MessageRemoteDataSourceImpl(firestore: sl()),
   );
@@ -119,11 +138,11 @@ Future<void> init() async {
     () => MessageLocalDataSourceImpl(sl()),
   );
 
-  // Users Data sources
-  sl.registerLazySingleton<UsersRemoteDataSource>(
-    () => UsersRemoteDataSourceImpl(firestore: sl()),
+  // Profile Data sources
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(sl()),
   );
-  sl.registerLazySingleton<UsersLocalDataSource>(
-    () => UsersLocalDataSourceImpl(sl()),
+  sl.registerLazySingleton<ProfileLocalDataSource>(
+    () => ProfileLocalDataSourceImpl(sl()),
   );
 }

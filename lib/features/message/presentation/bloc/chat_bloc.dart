@@ -61,7 +61,7 @@ class MessageBloc extends Bloc<ChatEvent, ChatState> {
         senderId: event.currentUserId,
         receiverId: event.receiverId,
         text: event.text,
-        timestamp: DateTime.now(),
+        timestamp: DateTime.now().toIso8601String(),
       );
 
       await sendMessageUseCase(message);

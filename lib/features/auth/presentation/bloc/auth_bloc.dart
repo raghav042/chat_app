@@ -12,8 +12,8 @@ import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final RegisterUserUseCase registerUserUseCase;
-  final LoginUserUseCase loginUserUseCase;
+  final RegisterUseCase registerUserUseCase;
+  final LoginUseCase loginUserUseCase;
 
   AuthBloc({
     required this.registerUserUseCase,
