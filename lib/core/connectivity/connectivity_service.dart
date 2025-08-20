@@ -1,5 +1,3 @@
-// lib/core/connectivity/connectivity_service.dart
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class ConnectivityService {
@@ -11,7 +9,6 @@ class ConnectivityService {
   Future<List<ConnectivityResult>> checkConnectivity() async {
     return await _connectivity.checkConnectivity();
   }
-
 
   Future<bool> get isConnected async {
     final result = await checkConnectivity();

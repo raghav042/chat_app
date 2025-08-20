@@ -33,6 +33,7 @@ import '../../features/auth/domain/usecase/register_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 
 import '../../features/profile/domain/usecases/get_profile_usecase.dart';
+import '../connectivity/connectivity_bloc.dart';
 import '../connectivity/connectivity_service.dart';
 
 final sl = GetIt.instance;
@@ -62,6 +63,9 @@ Future<void> init() async {
       logoutUseCase: sl(),
     ),
   );
+
+  // Register ConnectivityBloc here
+  sl.registerFactory(() => ConnectivityBloc(sl()));
 
   sl.registerFactory(
     () => MessageBloc(

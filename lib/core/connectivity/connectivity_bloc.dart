@@ -1,5 +1,3 @@
-// lib/core/connectivity/connectivity_bloc.dart
-
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +12,8 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
 
   ConnectivityBloc(this.connectivityService) : super(ConnectivityInitial()) {
     on<ConnectivityChanged>((event, emit) {
-      final hasConnection = event.results.any((result) => result != ConnectivityResult.none);
+      final hasConnection =
+          event.results.any((result) => result != ConnectivityResult.none);
       if (hasConnection) {
         emit(ConnectivityOnline());
       } else {
@@ -26,7 +25,8 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
   }
 
   Future<void> _init() async {
-    _subscription = connectivityService.onConnectivityChanged.listen((resultList) {
+    _subscription =
+        connectivityService.onConnectivityChanged.listen((resultList) {
       add(ConnectivityChanged(resultList));
     });
 

@@ -1,5 +1,3 @@
-// lib/core/connectivity/connectivity_state.dart
-
 import 'package:equatable/equatable.dart';
 
 abstract class ConnectivityState extends Equatable {
