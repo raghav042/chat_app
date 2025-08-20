@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(create: (_) => sl<AuthBloc>()),
-        // add missing code here
       ],
       child: MaterialApp(
         builder: (context, child) {
@@ -45,7 +44,6 @@ class MyApp extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             } else if (state is Authenticated) {
-              // add missing code here
             } else if (state is Unauthenticated) {
               return LoginScreen();
             }
