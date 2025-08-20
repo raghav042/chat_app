@@ -1,5 +1,3 @@
-// lib/features/auth/presentation/bloc/widgets/login_form.dart
-
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
@@ -65,28 +63,18 @@ class _LoginFormState extends State<LoginForm> {
                     onPressed: widget.onSubmit,
                   ),
                   SizedBox(height: 16),
-                  TextButton(
-                    onPressed: widget.onToggle,
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: widget.isLogin
-                                ? AppStrings.dontHaveAnAccount
-                                : AppStrings.alreadyHaveAnAccount,
-                          ),
-                          TextSpan(
-                            text: widget.isLogin
-                                ? AppStrings.register
-                                : AppStrings.login,
-                            style: const TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(widget.isLogin
+                          ? AppStrings.dontHaveAnAccount
+                          : AppStrings.alreadyHaveAnAccount),
+                      TextButton(
+                          onPressed: widget.onToggle,
+                          child: Text(widget.isLogin
+                              ? AppStrings.register
+                              : AppStrings.login)),
+                    ],
                   ),
                 ],
               ),
