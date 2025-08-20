@@ -1,3 +1,4 @@
+import 'package:chat_app/features/chat/presentation/screens/chat_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +19,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
 
   @override
@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (state is Authenticated) {
-              // navigate to required screen
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ChatScreen()));
             }
           },
           builder: (context, state) {

@@ -56,6 +56,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
+      if (user != null) {
+        emit(Authenticated(user: user));
+      }
     } on Exception catch (e) {
       emit(AuthFailure(e.toString()));
     }

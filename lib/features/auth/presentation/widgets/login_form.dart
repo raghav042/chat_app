@@ -70,10 +70,13 @@ class _LoginFormState extends State<LoginForm> {
                           ? AppStrings.dontHaveAnAccount
                           : AppStrings.alreadyHaveAnAccount),
                       TextButton(
-                          onPressed: widget.onToggle,
-                          child: Text(widget.isLogin
+                        onPressed: widget.onToggle,
+                        child: Text(
+                          widget.isLogin
                               ? AppStrings.register
-                              : AppStrings.login)),
+                              : AppStrings.login,
+                        ),
+                      ),
                     ],
                   ),
                 ],

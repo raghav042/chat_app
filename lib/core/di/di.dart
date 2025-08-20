@@ -13,10 +13,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/usecase/logout_usecase.dart';
+import '../../features/chat/data/datasources/local/chat_local_datasource.dart';
+import '../../features/chat/data/datasources/remote/chat_remote_datasource.dart';
 import '../../features/chat/data/repositories/chat_repository_impl.dart';
 import '../../features/chat/domain/repositories/chat_repository.dart';
 import '../../features/chat/domain/usecases/get_chat_users_usecase.dart';
 import '../../features/chat/domain/usecases/get_users_usecase.dart';
+import '../../features/chat/presentation/bloc/chat_bloc.dart';
 import '../../features/message/data/datasource/local/message_local_datasource.dart';
 import '../../features/message/data/datasource/remote/message_remote_datasource.dart';
 import '../../features/message/data/repository/message_repository_impl.dart';
@@ -57,18 +60,26 @@ Future<void> init() async {
 
   // BLoCs
   sl.registerFactory(
-    () => AuthBloc(
-     registerUseCase: sl(),
+        () => AuthBloc(
+      registerUseCase: sl(),
       loginUseCase: sl(),
       logoutUseCase: sl(),
     ),
   );
 
-  // Register ConnectivityBloc here
+  // Register ConnectivityBloc
   sl.registerFactory(() => ConnectivityBloc(sl()));
 
+  // Register ChatBloc
   sl.registerFactory(
-    () => MessageBloc(
+        () => ChatBloc(
+      getAllUsersUseCase: sl(),
+      getAllChatUsersUseCase: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+        () => MessageBloc(
       sendMessageUseCase: sl(),
       getMessagesUseCase: sl(),
       updateMessageUseCase: sl(),
@@ -97,7 +108,7 @@ Future<void> init() async {
 
   // Auth Repository
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
+        () => AuthRepositoryImpl(
       authDataSource: sl(),
       profileRemoteDataSource: sl(),
       profileLocalDataSource: sl(),
@@ -106,7 +117,7 @@ Future<void> init() async {
 
   // Chat Repository
   sl.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryImpl(
+        () => ChatRepositoryImpl(
       chatLocalDataSource: sl(),
       chatRemoteDataSource: sl(),
       messageRemoteDataSource: sl(),
@@ -116,7 +127,7 @@ Future<void> init() async {
 
   // Message Repository
   sl.registerLazySingleton<MessageRepository>(
-    () => MessageRepositoryImpl(
+        () => MessageRepositoryImpl(
       remoteDataSource: sl(),
       localDataSource: sl(),
     ),
@@ -124,7 +135,7 @@ Future<void> init() async {
 
   // Profile Repository
   sl.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(
+        () => ProfileRepositoryImpl(
       remoteDataSource: sl(),
       localDataSource: sl(),
     ),
@@ -132,22 +143,30 @@ Future<void> init() async {
 
   // Auth Data sources
   sl.registerLazySingleton<AuthDataSource>(
-    () => AuthDataSourceImpl(auth: sl(), firestore: sl()),
+        () => AuthDataSourceImpl(auth: sl(), firestore: sl()),
+  );
+
+  // Chat Data sources
+  sl.registerLazySingleton<ChatLocalDataSource>(
+        () => ChatLocalDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<ChatRemoteDataSource>(
+        () => ChatRemoteDataSourceImpl(sl()),
   );
 
   // Message Data sources
   sl.registerLazySingleton<MessageRemoteDataSource>(
-    () => MessageRemoteDataSourceImpl(firestore: sl()),
+        () => MessageRemoteDataSourceImpl(firestore: sl()),
   );
   sl.registerLazySingleton<MessageLocalDataSource>(
-    () => MessageLocalDataSourceImpl(sl()),
+        () => MessageLocalDataSourceImpl(sl()),
   );
 
   // Profile Data sources
   sl.registerLazySingleton<ProfileRemoteDataSource>(
-    () => ProfileRemoteDataSourceImpl(sl()),
+        () => ProfileRemoteDataSourceImpl(sl()),
   );
   sl.registerLazySingleton<ProfileLocalDataSource>(
-    () => ProfileLocalDataSourceImpl(sl()),
+        () => ProfileLocalDataSourceImpl(sl()),
   );
 }

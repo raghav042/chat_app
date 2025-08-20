@@ -1,4 +1,5 @@
-import 'package:chat_app/features/chat/presentation/screens/chat_screen.dart';
+import 'package:chat_app/features/chat/presentation/screens/chat_list_screen.dart';
+import 'package:chat_app/features/message/presentation/bloc/chat_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,6 +10,7 @@ import 'core/routes/route_names.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
+import 'features/chat/presentation/bloc/chat_bloc.dart';
 import 'widget/no_internet_widget.dart';
 
 class MyApp extends StatelessWidget {
@@ -18,9 +20,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // Providing the AuthBloc
+
         BlocProvider<AuthBloc>(create: (_) => sl<AuthBloc>()),
-        // Providing the ConnectivityBloc to the widget tree
+        BlocProvider(create: (context) => sl<ChatBloc>()),
+        BlocProvider(create: (context) => sl<MessageBloc>()),
         BlocProvider<ConnectivityBloc>(create: (_) => sl<ConnectivityBloc>()),
       ],
       child: MaterialApp(
@@ -37,7 +40,6 @@ class MyApp extends StatelessWidget {
             ],
           );
         },
-        theme: ThemeData(primarySwatch: Colors.blue),
         initialRoute: RouteNames.login,
         onGenerateRoute: AppRoutes.generateRoute,
         home: BlocBuilder<AuthBloc, AuthState>(
