@@ -42,8 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             if (state is Authenticated) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text(AppStrings.registrationSuccessful)),
+                SnackBar(content: Text(AppStrings.registrationSuccessful)),
               );
               Navigator.pushNamed(context, RouteNames.login);
             }

@@ -16,7 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
   final ProfileLocalDataSource profileLocalDataSource;
 
   @override
-  Future<void> register(
+  Future<ProfileEntity> register(
       {required String email, required String password}) async {
     final user = await authDataSource.register(
       email: email,
@@ -31,6 +31,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     await profileRemoteDataSource.createProfile(profile);
     await profileLocalDataSource.cacheProfile(profile);
+    return profile.toEntity();
   }
 
   @override

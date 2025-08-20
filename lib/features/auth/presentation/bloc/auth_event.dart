@@ -1,5 +1,3 @@
-// lib/features/auth/presentation/bloc/auth_event.dart
-
 abstract class AuthEvent {}
 
 class LoginSubmitted extends AuthEvent {

@@ -57,8 +57,9 @@ Future<void> init() async {
   // BLoCs
   sl.registerFactory(
     () => AuthBloc(
-      loginUserUseCase: sl(),
-      registerUserUseCase: sl(),
+     registerUseCase: sl(),
+      loginUseCase: sl(),
+      logoutUseCase: sl(),
     ),
   );
 
